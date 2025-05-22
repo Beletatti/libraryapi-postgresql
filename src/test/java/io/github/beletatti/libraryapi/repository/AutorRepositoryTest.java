@@ -1,11 +1,15 @@
 package io.github.beletatti.libraryapi.repository;
 
 import io.github.beletatti.libraryapi.model.Autor;
+import io.github.beletatti.libraryapi.model.GeneroLivro;
+import io.github.beletatti.libraryapi.model.Livro;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,6 +19,9 @@ public class AutorRepositoryTest {
 
     @Autowired
     AutorRepository repository;
+
+    @Autowired
+    LivroRepository livroRepository;
 
     @Test
     public void salvarTest() {
@@ -71,5 +78,37 @@ public class AutorRepositoryTest {
         var id = UUID.fromString("4139c512-cd9a-437c-bc3d-04eb2d52d0ce");
         var maria = repository.findById(id).get();
         repository.deleteById(id);
+    }
+
+    @Test
+    void salvarAutorComLivrosTest(){
+        Autor autor = new Autor();
+        autor.setName("Guia");
+        autor.setNacionalidade("Brasileiro");
+        autor.setDataNascimento(LocalDate.of(1943, 6, 4));
+
+        Livro livro = new Livro();
+        livro.setIsbn("96665-4332");
+        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setGenero(GeneroLivro.ROMANCE);
+        livro.setTitulo("YEAH");
+        livro.setDataPublicacao(LocalDate.of(1954, 4, 6));
+        livro.setAutor(autor);
+
+        Livro livro2 = new Livro();
+        livro2.setIsbn("96665-4332");
+        livro2.setPreco(BigDecimal.valueOf(300.50));
+        livro2.setGenero(GeneroLivro.FICCAO);
+        livro2.setTitulo("doom");
+        livro2.setDataPublicacao(LocalDate.of(2025, 4, 7));
+        livro2.setAutor(autor);
+
+        autor.setLivro(new ArrayList<>());
+        autor.getLivro().add(livro);
+        autor.getLivro().add(livro2);
+
+        repository.save(autor);
+
+        livroRepository.saveAll(autor.getLivro());
     }
 }
