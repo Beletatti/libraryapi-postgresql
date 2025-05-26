@@ -5,6 +5,7 @@ import io.github.beletatti.libraryapi.model.Autor;
 import io.github.beletatti.libraryapi.repository.AutorRepository;
 import io.github.beletatti.libraryapi.repository.LivroRepository;
 import io.github.beletatti.libraryapi.validator.AutorValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
