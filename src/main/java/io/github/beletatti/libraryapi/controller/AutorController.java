@@ -2,7 +2,6 @@ package io.github.beletatti.libraryapi.controller;
 
 import io.github.beletatti.libraryapi.controller.dto.AutorDTO;
 import io.github.beletatti.libraryapi.controller.dto.ErroResposta;
-import io.github.beletatti.libraryapi.controller.mappers.AutorMapper;
 import io.github.beletatti.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.beletatti.libraryapi.exceptions.RegistroDuplicado;
 import io.github.beletatti.libraryapi.model.Autor;
