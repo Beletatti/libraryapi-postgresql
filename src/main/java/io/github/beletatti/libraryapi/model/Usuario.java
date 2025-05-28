@@ -1,8 +1,8 @@
 package io.github.beletatti.libraryapi.model;
 
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.Data;
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import org.hibernate.annotations.Type;
 
 import java.util.List;
@@ -23,7 +23,10 @@ public class Usuario {
     @Column
     private String senha;
 
+    @Column
+    private String email;
+
     @Type(ListArrayType.class)
-    @Column(name = "role", columnDefinition = "varchar[]")
+    @Column(name = "roles", columnDefinition = "varchar[]")
     private List<String> roles;
 }

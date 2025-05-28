@@ -3,12 +3,13 @@ package io.github.beletatti.libraryapi.controller;
 import io.github.beletatti.libraryapi.controller.dto.UsuarioDTO;
 import io.github.beletatti.libraryapi.controller.mappers.UsuarioMapper;
 import io.github.beletatti.libraryapi.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
 
@@ -17,9 +18,8 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void salvar(@RequestBody UsuarioDTO dto){
+    public void salvar(@RequestBody @Valid UsuarioDTO dto){
         var usuario = mapper.toEntity(dto);
         service.salvar(usuario);
-
     }
 }

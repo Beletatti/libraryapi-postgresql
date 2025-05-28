@@ -1,6 +1,5 @@
 package io.github.beletatti.libraryapi.controller.dto;
 
-import io.github.beletatti.libraryapi.model.Autor;
 import io.github.beletatti.libraryapi.model.GeneroLivro;
 
 import java.math.BigDecimal;

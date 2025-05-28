@@ -2,6 +2,7 @@ package io.github.beletatti.libraryapi.controller.mappers;
 
 import io.github.beletatti.libraryapi.controller.dto.CadastroLivroDTO;
 import io.github.beletatti.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
+import io.github.beletatti.libraryapi.controller.mappers.AutorMapper;
 import io.github.beletatti.libraryapi.model.Livro;
 import io.github.beletatti.libraryapi.repository.AutorRepository;
 import org.mapstruct.Mapper;

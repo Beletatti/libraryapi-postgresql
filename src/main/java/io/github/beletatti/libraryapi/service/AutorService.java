@@ -2,8 +2,10 @@ package io.github.beletatti.libraryapi.service;
 
 import io.github.beletatti.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import io.github.beletatti.libraryapi.model.Autor;
+import io.github.beletatti.libraryapi.model.Usuario;
 import io.github.beletatti.libraryapi.repository.AutorRepository;
 import io.github.beletatti.libraryapi.repository.LivroRepository;
+import io.github.beletatti.libraryapi.security.SecurityService;
 import io.github.beletatti.libraryapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -15,22 +17,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AutorService {
 
     private final AutorRepository repository;
     private final AutorValidator validator;
     private final LivroRepository livroRepository;
-
-    public AutorService(AutorRepository repository, AutorValidator validator, LivroRepository livroRepository) {
-        this.repository = repository;
-        this.validator = validator;
-        this.livroRepository = livroRepository;
-    }
+    private final SecurityService securityService;
 
     public Autor salvar(Autor autor){
         validator.validar(autor);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        autor.setUsuario(usuario);
         return repository.save(autor);
-
     }
 
     public void atualizar(Autor autor){
@@ -39,7 +38,6 @@ public class AutorService {
         }
         validator.validar(autor);
         repository.save(autor);
-
     }
 
     public Optional<Autor> obterPorId(UUID id){
@@ -48,18 +46,19 @@ public class AutorService {
 
     public void deletar(Autor autor){
         if(possuiLivro(autor)){
-            throw new OperacaoNaoPermitidaException("Não é permitido excluir um Autor possui livros cadastrados.");
+            throw new OperacaoNaoPermitidaException(
+                    "Não é permitido excluir um Autor que possui livros cadastrados!");
         }
         repository.delete(autor);
     }
 
-    public List<Autor> pesquisa(String name, String nacionalidade){
-        if(name != null && nacionalidade != null){
-            return repository.findByNameAndNacionalidade(name, nacionalidade);
+    public List<Autor> pesquisa(String nome, String nacionalidade){
+        if(nome != null && nacionalidade != null){
+            return repository.findByNomeAndNacionalidade(nome, nacionalidade);
         }
 
-        if(name != null){
-            return repository.findByName(name);
+        if(nome != null){
+            return repository.findByNome(nome);
         }
 
         if(nacionalidade != null){
@@ -71,19 +70,17 @@ public class AutorService {
 
     public List<Autor> pesquisaByExample(String nome, String nacionalidade){
         var autor = new Autor();
-        autor.setName(nome);
+        autor.setNome(nome);
         autor.setNacionalidade(nacionalidade);
 
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
-                //.withIgnorePaths()
+                .withIgnorePaths("id", "dataNascimento", "dataCadastro")
                 .withIgnoreNullValues()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-
-        Example<Autor> autorExample= Example.of(autor, matcher);
+        Example<Autor> autorExample = Example.of(autor, matcher);
         return repository.findAll(autorExample);
-
     }
 
     public boolean possuiLivro(Autor autor){

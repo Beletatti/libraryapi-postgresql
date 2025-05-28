@@ -14,11 +14,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UsuarioService service;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = service.obterPorLogin(username);
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        Usuario usuario = service.obterPorLogin(login);
 
         if(usuario == null){
-            throw new UsernameNotFoundException("Usuario não encontrado");
+            throw new UsernameNotFoundException("Usuario não encontrado!");
         }
 
         return User.builder()

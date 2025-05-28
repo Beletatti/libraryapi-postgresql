@@ -10,16 +10,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepository repository;
     private final PasswordEncoder encoder;
 
     public void salvar(Usuario usuario){
         var senha = usuario.getSenha();
         usuario.setSenha(encoder.encode(senha));
-        usuarioRepository.save(usuario);
+        repository.save(usuario);
     }
 
     public Usuario obterPorLogin(String login){
-        return usuarioRepository.findByLogin(login);
+        return repository.findByLogin(login);
+    }
+
+    public Usuario obterPorEmail(String email){
+        return repository.findByEmail(email);
     }
 }
